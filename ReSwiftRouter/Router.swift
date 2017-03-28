@@ -22,7 +22,11 @@ open class Router<State: StateType>: StoreSubscriber {
         self.store = store 
         self.routables.append(rootRoutable)
 
-        self.store.subscribe(self, selector: stateSelector)
+        self.store.subscribe(self) {
+            $0.select {
+                return stateSelector($0)
+            }
+        }
     }
 
     open func newState(state: NavigationState) {
